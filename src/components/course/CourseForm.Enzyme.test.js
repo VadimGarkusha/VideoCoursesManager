@@ -10,9 +10,9 @@ function setup(saving){
         errors: {},
         onSave: () => {},
         onChange: () => {}
-    }
+    };
 
-    return shallow(<CourseForm {...props}/>)
+    return shallow(<CourseForm {...props}/>);
 }
 describe('CourseForm via Enzyme', () => {
     it('renders form and h1', () => {
