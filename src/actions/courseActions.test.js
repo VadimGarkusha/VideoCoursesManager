@@ -25,7 +25,7 @@ describe('Async Actions', () => {
             const actions = store.getActions();
             expect(actions[0].type).toEqual(types.BEGIN_AJAX_CALL);
             expect(actions[1].type).toEqual(types.LOAD_COURSE_SUCCESS);
-            done();
+            done();//eslint-disable-line
         });
     });
 });

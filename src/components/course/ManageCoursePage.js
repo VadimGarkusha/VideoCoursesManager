@@ -84,9 +84,9 @@ ManageCoursePage.contextTypes = {
 };
 
 ManageCoursePage.propTypes = {
-    course: PropTypes.object.IsRequired,
-    authors: PropTypes.array.IsRequired,
-    actions: PropTypes.object.IsRequired
+    course: PropTypes.func.IsRequired,
+    authors: PropTypes.func.IsRequired,
+    actions: PropTypes.func.IsRequired
 };
 
 function getCourseById(courses, id){
