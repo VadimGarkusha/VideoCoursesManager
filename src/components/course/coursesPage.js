@@ -1,21 +1,34 @@
 import React, {Component, PropTypes} from 'react';
 import {connect} from 'react-redux';
 import {browserHistory} from 'react-router';
+import {bindActionCreators} from 'redux';
+import * as courseActions from '../../actions/courseActions';
 import CourseList from './CourseList';
+import toastr from 'toastr';
 
 class CoursesPage extends Component{
     constructor(props, context){
         super(props, context);
 
+        this.state = {
+            deleting: {isDeleting:false, courseId: null}
+        };
         this.redirectToAddCoursePage = this.redirectToAddCoursePage.bind(this);
-    }
-
-    courseRow(course, index){
-        return <div key={index}>{course.title}</div>;
+        this.deleteCourse = this.deleteCourse.bind(this);
     }
 
     redirectToAddCoursePage(){
         browserHistory.push('/course');
+    }
+
+    async deleteCourse(course){
+        this.setState({deleting: {isDeleting:true, courseId: course.id}});
+        await this.props.actions.deleteCourse(course)
+        .catch(error => {
+            this.setState({deleting: {isDeleting: false}});
+            toastr.error(error);});
+        this.setState({deleting: {isDeleting: false}});
+        toastr.success('Course deleted');
     }
 
     render(){
@@ -28,14 +41,17 @@ class CoursesPage extends Component{
                     value='Add Course'
                     className='btn btn-primary'
                     onClick={this.redirectToAddCoursePage}/>
-                <CourseList courses = {courses}/>
+                <CourseList courses = {courses} 
+                deleteCourse = {this.deleteCourse}
+                deleting = {this.state.deleting}/>
             </div>
         );
     }
 }
 
 CoursesPage.propTypes = {
-    courses: PropTypes.array.isRequired
+    courses: PropTypes.array.isRequired,
+    actions: PropTypes.func.isRequired
 };
 
 function mapStateToProps(state, ownProps){
@@ -46,7 +62,7 @@ function mapStateToProps(state, ownProps){
 
 function mapDispatchToProps(dispatch){
     return{
-        //actions: bindActionCreators(courseActions, dispatch)
+        actions: bindActionCreators(courseActions, dispatch)
     };
 }
 
